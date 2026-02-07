@@ -9,6 +9,7 @@ import { Schedule, ScheduleFormData, DashboardStats } from '@/types';
 import { getStoredSchedules, saveSchedules } from '@/data/mockData';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { staggerContainerVariants, staggerItemVariants } from '@/components/layout/PageTransition';
 
 export default function AdminDashboard() {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
@@ -72,37 +73,50 @@ export default function AdminDashboard() {
           </Button>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatsCard
-            title="Total Schedules"
-            value={stats.totalSchedules}
-            icon={Calendar}
-            description="All schedule entries"
-            variant="default"
-          />
-          <StatsCard
-            title="Pending Approvals"
-            value={stats.pendingApprovals}
-            icon={Clock}
-            description="Awaiting authorization"
-            variant="warning"
-          />
-          <StatsCard
-            title="Approved"
-            value={stats.approvedSchedules}
-            icon={CheckCircle}
-            description="Ready to lock"
-            variant="success"
-          />
-          <StatsCard
-            title="Locked"
-            value={stats.lockedSchedules}
-            icon={Lock}
-            description="Finalized schedules"
-            variant="primary"
-          />
-        </div>
+        {/* Stats Grid with stagger animation */}
+        <motion.div 
+          variants={staggerContainerVariants}
+          initial="initial"
+          animate="enter"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+        >
+          <motion.div variants={staggerItemVariants}>
+            <StatsCard
+              title="Total Schedules"
+              value={stats.totalSchedules}
+              icon={Calendar}
+              description="All schedule entries"
+              variant="default"
+            />
+          </motion.div>
+          <motion.div variants={staggerItemVariants}>
+            <StatsCard
+              title="Pending Approvals"
+              value={stats.pendingApprovals}
+              icon={Clock}
+              description="Awaiting authorization"
+              variant="warning"
+            />
+          </motion.div>
+          <motion.div variants={staggerItemVariants}>
+            <StatsCard
+              title="Approved"
+              value={stats.approvedSchedules}
+              icon={CheckCircle}
+              description="Ready to lock"
+              variant="success"
+            />
+          </motion.div>
+          <motion.div variants={staggerItemVariants}>
+            <StatsCard
+              title="Locked"
+              value={stats.lockedSchedules}
+              icon={Lock}
+              description="Finalized schedules"
+              variant="primary"
+            />
+          </motion.div>
+        </motion.div>
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
