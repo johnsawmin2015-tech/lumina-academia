@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { Schedule, ScheduleStatus } from '@/types';
 import { YEAR_COLORS, STATUS_LABELS } from '@/lib/constants';
 import { Badge } from '@/components/ui/badge';
+import { staggerItemVariants } from '@/components/layout/PageTransition';
 
 interface ScheduleCardProps {
   schedule: Schedule;
@@ -14,6 +15,7 @@ interface ScheduleCardProps {
   onDelete?: (schedule: Schedule) => void;
   isAdmin?: boolean;
   compact?: boolean;
+  animationDelay?: number;
 }
 
 const statusIcons: Record<ScheduleStatus, React.ElementType> = {
@@ -30,19 +32,26 @@ export function ScheduleCard({
   onLock, 
   onDelete,
   isAdmin = false,
-  compact = false 
+  compact = false,
+  animationDelay = 0
 }: ScheduleCardProps) {
   const StatusIcon = statusIcons[schedule.status];
   const yearColorClass = YEAR_COLORS[schedule.year];
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -2, transition: { duration: 0.2 } }}
+      variants={staggerItemVariants}
+      initial="initial"
+      animate="enter"
+      whileHover={{ 
+        y: -4, 
+        boxShadow: '0 12px 24px -8px rgba(0, 0, 0, 0.15)',
+        transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] } 
+      }}
+      transition={{ delay: animationDelay }}
       className={cn(
         "group relative bg-card rounded-lg border border-border/50 overflow-hidden",
-        "transition-all duration-300 hover:shadow-lg hover:border-border",
+        "transition-colors duration-300 hover:border-primary/30",
         yearColorClass,
         compact ? "p-3" : "p-4"
       )}

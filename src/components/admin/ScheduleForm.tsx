@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Schedule, ScheduleFormData, AcademicYear, ClassSection, Day } from '@/types';
 import { ACADEMIC_YEARS, CLASS_SECTIONS, DAYS, SCHEDULABLE_TIMES, YEAR_LABELS } from '@/lib/constants';
+import { detectConflicts, ScheduleConflict, getConflictSeverity } from '@/lib/conflictDetection';
+import { getStoredSchedules } from '@/data/mockData';
+import { ConflictWarning } from './ConflictWarning';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -64,6 +67,9 @@ interface ScheduleFormProps {
 }
 
 export function ScheduleForm({ open, onClose, onSubmit, initialData, mode }: ScheduleFormProps) {
+  const [conflicts, setConflicts] = useState<ScheduleConflict[]>([]);
+  const [existingSchedules, setExistingSchedules] = useState<Schedule[]>([]);
+
   const form = useForm<ScheduleFormData>({
     resolver: zodResolver(scheduleSchema),
     defaultValues: initialData
@@ -89,15 +95,64 @@ export function ScheduleForm({ open, onClose, onSubmit, initialData, mode }: Sch
         },
   });
 
+  // Load existing schedules when dialog opens
+  useEffect(() => {
+    if (open) {
+      setExistingSchedules(getStoredSchedules());
+      setConflicts([]);
+    }
+  }, [open]);
+
+  // Watch form values for real-time conflict detection
+  const watchedValues = form.watch();
+
+  useEffect(() => {
+    if (!open) return;
+    
+    const { day, startTime, endTime, room, instructor, year, classSection } = watchedValues;
+    
+    // Only check if we have all required fields
+    if (day && startTime && endTime && room && instructor && year && classSection) {
+      const detectedConflicts = detectConflicts(
+        {
+          day: day as Day,
+          startTime,
+          endTime,
+          room,
+          instructor,
+          year: year as AcademicYear,
+          classSection: classSection as ClassSection,
+        },
+        existingSchedules,
+        initialData?.id // Exclude current schedule when editing
+      );
+      setConflicts(detectedConflicts);
+    } else {
+      setConflicts([]);
+    }
+  }, [watchedValues, existingSchedules, initialData?.id, open]);
+
+  const conflictSeverity = useMemo(() => getConflictSeverity(conflicts), [conflicts]);
+  const hasBlockingConflicts = conflictSeverity === 'error';
+
   const handleSubmit = (data: ScheduleFormData) => {
+    if (hasBlockingConflicts) {
+      return; // Prevent submission with conflicts
+    }
     onSubmit(data);
     form.reset();
     onClose();
   };
 
+  const handleClose = () => {
+    form.reset();
+    setConflicts([]);
+    onClose();
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px]">
+    <Dialog open={open} onOpenChange={handleClose}>
+      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">
             {mode === 'create' ? 'Create New Schedule' : 'Edit Schedule'}
@@ -106,6 +161,14 @@ export function ScheduleForm({ open, onClose, onSubmit, initialData, mode }: Sch
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+            {/* Conflict Warning */}
+            {conflicts.length > 0 && (
+              <ConflictWarning 
+                conflicts={conflicts} 
+                onDismiss={() => setConflicts([])}
+              />
+            )}
+
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
@@ -281,10 +344,14 @@ export function ScheduleForm({ open, onClose, onSubmit, initialData, mode }: Sch
             />
 
             <DialogFooter className="gap-2 pt-4">
-              <Button type="button" variant="outline" onClick={onClose}>
+              <Button type="button" variant="outline" onClick={handleClose}>
                 Cancel
               </Button>
-              <Button type="submit">
+              <Button 
+                type="submit" 
+                disabled={hasBlockingConflicts}
+                className={hasBlockingConflicts ? 'opacity-50 cursor-not-allowed' : ''}
+              >
                 {mode === 'create' ? 'Create Schedule' : 'Save Changes'}
               </Button>
             </DialogFooter>

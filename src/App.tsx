@@ -16,6 +16,7 @@ import AdminSchedules from "./pages/admin/Schedules";
 import AdminApprovals from "./pages/admin/Approvals";
 import StudentLogin from "./pages/student/Login";
 import StudentTimetable from "./pages/student/Timetable";
+import StudentProfile from "./pages/student/Profile";
 
 const queryClient = new QueryClient();
 
@@ -65,6 +66,14 @@ const App = () => (
                 element={
                   <ProtectedRoute allowedRole="student">
                     <StudentTimetable />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/student/profile"
+                element={
+                  <ProtectedRoute allowedRole="student">
+                    <StudentProfile />
                   </ProtectedRoute>
                 }
               />

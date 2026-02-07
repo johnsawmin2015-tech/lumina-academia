@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { LogOut, GraduationCap, User } from 'lucide-react';
+import { LogOut, GraduationCap, User, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from './ThemeToggle';
 import { useAuth } from '@/contexts/AuthContext';
+import { cn } from '@/lib/utils';
 
 interface HeaderProps {
   variant?: 'admin' | 'student' | 'public';
@@ -17,6 +18,8 @@ export function Header({ variant = 'public' }: HeaderProps) {
   const handleLogout = () => {
     logout();
   };
+
+  const isStudentRoute = (path: string) => location.pathname === path;
 
   return (
     <motion.header
@@ -37,6 +40,36 @@ export function Header({ variant = 'public' }: HeaderProps) {
             <span className="text-xs text-muted-foreground">Premium Edition</span>
           </div>
         </Link>
+
+        {/* Student Navigation */}
+        {user?.role === 'student' && (
+          <nav className="hidden md:flex items-center gap-1">
+            <Link
+              to="/student/timetable"
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors",
+                isStudentRoute('/student/timetable')
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+              )}
+            >
+              <Calendar className="h-4 w-4" />
+              Timetable
+            </Link>
+            <Link
+              to="/student/profile"
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors",
+                isStudentRoute('/student/profile')
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+              )}
+            >
+              <User className="h-4 w-4" />
+              Profile
+            </Link>
+          </nav>
+        )}
 
         {/* Navigation & Actions */}
         <div className="flex items-center gap-4">
