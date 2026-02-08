@@ -58,16 +58,16 @@ export default function AdminDashboard() {
 
   return (
     <AdminLayout>
-      <div className="space-y-8">
+      <div className="space-y-10">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
-            <p className="text-muted-foreground mt-1">
+            <h1 className="font-display text-4xl font-bold text-foreground tracking-tight">Dashboard</h1>
+            <p className="text-muted-foreground mt-2">
               Overview of your academic schedule management
             </p>
           </div>
-          <Button onClick={() => setIsFormOpen(true)} className="gap-2">
+          <Button onClick={() => setIsFormOpen(true)} className="gap-2 btn-luxury shine">
             <Plus className="h-4 w-4" />
             New Schedule
           </Button>
@@ -119,12 +119,12 @@ export default function AdminDashboard() {
         </motion.div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Recent Activity */}
-          <div className="lg:col-span-2 bg-card rounded-lg border border-border p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold text-foreground">Recent Schedules</h2>
-              <Button variant="ghost" size="sm" asChild>
+          <div className="lg:col-span-2 luxury-card p-8">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="font-display text-xl font-semibold text-foreground">Recent Schedules</h2>
+              <Button variant="ghost" size="sm" asChild className="text-primary hover:text-primary/80">
                 <a href="/admin/schedules">View All</a>
               </Button>
             </div>
@@ -143,8 +143,8 @@ export default function AdminDashboard() {
           </div>
 
           {/* Quick Stats */}
-          <div className="bg-card rounded-lg border border-border p-6">
-            <h2 className="text-lg font-semibold text-foreground mb-6">Quick Stats</h2>
+          <div className="luxury-card p-8">
+            <h2 className="font-display text-xl font-semibold text-foreground mb-8">Quick Stats</h2>
             
             <div className="space-y-4">
               <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/50">

@@ -77,37 +77,41 @@ export default function StudentLogin() {
           className="w-full max-w-md"
         >
           {/* Header */}
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-              <GraduationCap className="h-7 w-7 text-primary" />
+          <div className="flex items-center gap-4 mb-10">
+            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20">
+              <GraduationCap className="h-8 w-8 text-primary" />
             </div>
             <div>
-              <span className="text-xl font-semibold text-foreground">Student Portal</span>
-              <p className="text-xs text-muted-foreground">Premium Academic Suite</p>
+              <span className="font-display text-2xl font-semibold text-foreground">Student Portal</span>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider">Premium Academic Suite</p>
             </div>
           </div>
 
           <div className="space-y-2 mb-8">
-            <h2 className="text-2xl font-bold text-foreground">Welcome back</h2>
+            <h2 className="font-display text-3xl font-bold text-foreground">Welcome back</h2>
             <p className="text-muted-foreground">Sign in to view your class schedule</p>
           </div>
 
           {/* Demo Credentials */}
-          <div className="p-4 mb-6 rounded-lg bg-secondary/50 border border-border">
-            <p className="text-xs font-medium text-muted-foreground mb-2">Demo Credentials</p>
-            <p className="text-sm text-foreground">
-              <span className="font-medium">Email:</span> {MOCK_STUDENT_CREDENTIALS.email}
-            </p>
-            <p className="text-sm text-foreground">
-              <span className="font-medium">Password:</span> {MOCK_STUDENT_CREDENTIALS.password}
-            </p>
+          <div className="p-5 mb-6 rounded-xl bg-secondary/60 border border-border/60 backdrop-blur-sm">
+            <p className="text-xs font-medium text-muted-foreground mb-3 uppercase tracking-wider">Demo Credentials</p>
+            <div className="space-y-1.5">
+              <p className="text-sm text-foreground">
+                <span className="text-muted-foreground">Email:</span>{' '}
+                <span className="font-mono font-medium">{MOCK_STUDENT_CREDENTIALS.email}</span>
+              </p>
+              <p className="text-sm text-foreground">
+                <span className="text-muted-foreground">Password:</span>{' '}
+                <span className="font-mono font-medium">{MOCK_STUDENT_CREDENTIALS.password}</span>
+              </p>
+            </div>
           </div>
 
           {error && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex items-center gap-2 p-4 mb-6 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive"
+              className="flex items-center gap-3 p-4 mb-6 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive"
             >
               <AlertCircle className="h-4 w-4 flex-shrink-0" />
               <p className="text-sm">{error}</p>
@@ -127,7 +131,7 @@ export default function StudentLogin() {
                         <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
                           placeholder="student@university.edu"
-                          className="pl-10"
+                          className="pl-10 input-luxury"
                           {...field}
                         />
                       </div>
@@ -149,7 +153,7 @@ export default function StudentLogin() {
                         <Input
                           type={showPassword ? 'text' : 'password'}
                           placeholder="Enter your password"
-                          className="pl-10 pr-10"
+                          className="pl-10 pr-10 input-luxury"
                           {...field}
                         />
                         <button
@@ -166,10 +170,10 @@ export default function StudentLogin() {
                 )}
               />
 
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button type="submit" className="w-full btn-luxury py-6 text-base" disabled={isLoading}>
                 {isLoading ? (
                   <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
+                    <div className="w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
                     <span>Signing in...</span>
                   </div>
                 ) : (
@@ -189,44 +193,49 @@ export default function StudentLogin() {
       </div>
 
       {/* Right Panel - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-secondary via-background to-secondary/50 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-40 right-20 w-72 h-72 rounded-full bg-primary blur-3xl" />
-          <div className="absolute bottom-20 left-40 w-96 h-96 rounded-full bg-primary blur-3xl" />
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-secondary via-background to-secondary/30 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-25">
+          <div className="absolute top-40 right-20 w-72 h-72 rounded-full bg-primary blur-[100px]" />
+          <div className="absolute bottom-20 left-40 w-96 h-96 rounded-full bg-primary blur-[120px]" />
         </div>
         
-        <div className="relative z-10 flex flex-col justify-center p-12">
+        {/* Decorative Elements */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full border border-primary/10" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-primary/10" />
+        
+        <div className="relative z-10 flex flex-col justify-center p-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
           >
-            <h1 className="text-4xl font-display font-bold text-foreground mb-4">
-              Your Academic Schedule
+            <h1 className="font-display text-5xl font-bold text-foreground mb-6 leading-[1.1]">
+              Your Academic
+              <span className="block text-gradient-gold">Schedule</span>
             </h1>
-            <p className="text-lg text-muted-foreground max-w-md mb-8">
+            <p className="text-lg text-muted-foreground max-w-md mb-10 leading-relaxed">
               Access your personalized timetable, view class details, and stay organized throughout your academic journey.
             </p>
 
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 text-muted-foreground">
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                  <span className="text-primary font-semibold">1</span>
-                </div>
-                <span>View your weekly schedule</span>
-              </div>
-              <div className="flex items-center gap-3 text-muted-foreground">
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                  <span className="text-primary font-semibold">2</span>
-                </div>
-                <span>Filter by year and class</span>
-              </div>
-              <div className="flex items-center gap-3 text-muted-foreground">
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                  <span className="text-primary font-semibold">3</span>
-                </div>
-                <span>See instructor and room details</span>
-              </div>
+            <div className="space-y-5">
+              {[
+                { num: '1', text: 'View your weekly schedule' },
+                { num: '2', text: 'Filter by year and class' },
+                { num: '3', text: 'See instructor and room details' },
+              ].map((step, i) => (
+                <motion.div
+                  key={step.num}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4 + i * 0.1 }}
+                  className="flex items-center gap-4 text-muted-foreground"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+                    <span className="text-primary font-display font-semibold">{step.num}</span>
+                  </div>
+                  <span className="text-sm font-medium">{step.text}</span>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
         </div>

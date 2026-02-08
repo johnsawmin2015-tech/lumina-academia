@@ -25,19 +25,21 @@ export function Header({ variant = 'public' }: HeaderProps) {
     <motion.header
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+      transition={{ duration: 0.5 }}
+      className="sticky top-0 z-50 w-full border-b border-border/30 glass"
     >
-      <div className="container flex h-16 items-center justify-between">
+      <div className="container flex h-18 items-center justify-between py-4">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-            <GraduationCap className="h-6 w-6 text-primary" />
+          <div className="relative w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/15 transition-all duration-300 overflow-hidden">
+            <div className="absolute inset-0 bg-gold-gradient opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
+            <GraduationCap className="h-6 w-6 text-primary relative z-10" />
           </div>
           <div className="flex flex-col">
-            <span className="font-display font-semibold text-lg leading-tight text-foreground">
+            <span className="font-display font-semibold text-lg leading-tight text-foreground tracking-tight">
               Academic Suite
             </span>
-            <span className="text-xs text-muted-foreground">Premium Edition</span>
+            <span className="text-[10px] uppercase tracking-[0.2em] text-primary/80 font-medium">Premium Edition</span>
           </div>
         </Link>
 

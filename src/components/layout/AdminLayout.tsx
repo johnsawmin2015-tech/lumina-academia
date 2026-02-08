@@ -30,8 +30,8 @@ export function AdminLayout({ children }: AdminLayoutProps) {
       
       <div className="flex">
         {/* Sidebar */}
-        <aside className="hidden md:flex w-64 flex-col border-r border-border bg-sidebar min-h-[calc(100vh-4rem)]">
-          <nav className="flex-1 p-4 space-y-1">
+        <aside className="hidden md:flex w-72 flex-col border-r border-border/40 bg-sidebar min-h-[calc(100vh-4.5rem)]">
+          <nav className="flex-1 p-5 space-y-1.5">
             {sidebarItems.map((item) => {
               const isActive = location.pathname === item.path;
               return (
@@ -39,16 +39,28 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                   key={item.path}
                   to={item.path}
                   className={cn(
-                    "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200",
+                    "group flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-medium transition-all duration-300",
                     isActive 
                       ? "bg-primary text-primary-foreground shadow-gold" 
                       : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                   )}
                 >
-                  <item.icon className="h-5 w-5" />
-                  <span>{item.label}</span>
+                  <div className={cn(
+                    "w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300",
+                    isActive 
+                      ? "bg-primary-foreground/15" 
+                      : "bg-sidebar-accent group-hover:bg-primary/10"
+                  )}>
+                    <item.icon className="h-5 w-5" />
+                  </div>
+                  <span className="flex-1">{item.label}</span>
                   {isActive && (
-                    <ChevronRight className="ml-auto h-4 w-4" />
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </motion.div>
                   )}
                 </Link>
               );
@@ -56,17 +68,17 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           </nav>
 
           {/* Sidebar Footer */}
-          <div className="p-4 border-t border-sidebar-border">
-            <div className="px-4 py-3 rounded-lg bg-sidebar-accent/50">
-              <p className="text-xs text-sidebar-foreground/70">Admin Portal</p>
-              <p className="text-sm font-medium text-sidebar-foreground">Full Access</p>
+          <div className="p-5 border-t border-sidebar-border/50">
+            <div className="px-4 py-4 rounded-xl bg-gradient-to-br from-sidebar-accent/80 to-sidebar-accent/40 border border-sidebar-border/30">
+              <p className="text-[10px] uppercase tracking-wider text-sidebar-foreground/60 mb-1">Admin Portal</p>
+              <p className="text-sm font-display font-semibold text-sidebar-foreground">Full Access</p>
             </div>
           </div>
         </aside>
 
         {/* Mobile Navigation */}
-        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background border-t border-border z-50">
-          <nav className="flex justify-around py-2">
+        <div className="md:hidden fixed bottom-0 left-0 right-0 glass border-t border-border/40 z-50">
+          <nav className="flex justify-around py-3">
             {sidebarItems.map((item) => {
               const isActive = location.pathname === item.path;
               return (
@@ -74,12 +86,12 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                   key={item.path}
                   to={item.path}
                   className={cn(
-                    "flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-colors",
+                    "flex flex-col items-center gap-1.5 px-5 py-2 rounded-xl transition-all duration-300",
                     isActive ? "text-primary" : "text-muted-foreground"
                   )}
                 >
-                  <item.icon className="h-5 w-5" />
-                  <span className="text-xs">{item.label}</span>
+                  <item.icon className={cn("h-5 w-5", isActive && "scale-110")} />
+                  <span className="text-[10px] font-medium uppercase tracking-wide">{item.label}</span>
                 </Link>
               );
             })}
@@ -87,11 +99,11 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         </div>
 
         {/* Main Content */}
-        <main className="flex-1 p-6 md:p-8 pb-24 md:pb-8">
+        <main className="flex-1 p-6 md:p-10 pb-24 md:pb-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
           >
             {children}
           </motion.div>
