@@ -49,7 +49,7 @@ const Index = () => {
                 Academic Suite
               </span>
               <span className="text-[10px] uppercase tracking-[0.2em] text-primary/80 font-medium">
-                Premium Edition
+                UCS Mandalay · 2026
               </span>
             </div>
           </Link>
@@ -351,7 +351,7 @@ const Index = () => {
               </div>
               <div>
                 <span className="font-display font-semibold text-foreground">Academic Suite</span>
-                <span className="text-xs text-muted-foreground ml-2">© 2024</span>
+                <span className="text-xs text-muted-foreground ml-2">© 2026</span>
               </div>
             </div>
 

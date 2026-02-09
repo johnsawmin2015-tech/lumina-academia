@@ -5,15 +5,15 @@ export const mockUsers: User[] = [
   {
     id: 'admin-1',
     email: 'admin@university.edu',
-    name: 'Dr. Victoria Sterling',
+    name: 'Dr. John',
     role: 'admin',
   },
   {
     id: 'student-1',
     email: 'student@university.edu',
-    name: 'Alexander Thompson',
+    name: 'John Saw Min',
     role: 'student',
-    year: 3,
+    year: 2,
     classSection: 'A',
   },
 ];

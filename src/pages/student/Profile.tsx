@@ -122,7 +122,7 @@ export default function StudentProfile() {
                 <span className="text-sm">Student ID</span>
               </div>
               <p className="text-lg font-semibold text-foreground">
-                STU-2024-{user?.id?.slice(0, 4).toUpperCase() || '0001'}
+                KPTM-11125
               </p>
             </div>
           </div>
