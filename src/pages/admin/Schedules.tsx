@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Wand2 } from 'lucide-react';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import { TimetableView } from '@/components/timetable/TimetableView';
 import { ScheduleForm } from '@/components/admin/ScheduleForm';
-import { Schedule, ScheduleFormData } from '@/types';
+import { Schedule, ScheduleFormData, AcademicYear, ClassSection } from '@/types';
 import { getStoredSchedules, saveSchedules } from '@/data/mockData';
+import { autoGenerateSchedule } from '@/lib/autoScheduler';
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
@@ -145,17 +146,46 @@ export default function AdminSchedules() {
     <AdminLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
+         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-foreground">Schedules</h1>
             <p className="text-muted-foreground mt-1">
               Manage and organize all academic schedules
             </p>
           </div>
-          <Button onClick={() => setIsFormOpen(true)} className="gap-2">
-            <Plus className="h-4 w-4" />
-            New Schedule
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              onClick={() => {
+                const year: AcademicYear = 2;
+                const section: ClassSection = 'A';
+                const generated = autoGenerateSchedule(year, section, schedules);
+                if (generated.length > 0) {
+                  const updated = [...schedules, ...generated];
+                  setSchedules(updated);
+                  saveSchedules(updated);
+                  toast({
+                    title: 'Auto-Scheduled',
+                    description: `${generated.length} classes generated for Year ${year} Class ${section}.`,
+                  });
+                } else {
+                  toast({
+                    title: 'No Slots Available',
+                    description: 'All slots are occupied or conflicting.',
+                    variant: 'destructive',
+                  });
+                }
+              }}
+              className="gap-2"
+            >
+              <Wand2 className="h-4 w-4" />
+              Auto-Schedule
+            </Button>
+            <Button onClick={() => setIsFormOpen(true)} className="gap-2">
+              <Plus className="h-4 w-4" />
+              New Schedule
+            </Button>
+          </div>
         </div>
 
         {/* Timetable View */}

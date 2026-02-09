@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Filter, Calendar } from 'lucide-react';
+import { Filter, Calendar, LayoutGrid, Table2 } from 'lucide-react';
 import { Schedule, TimetableFilters, AcademicYear, ClassSection, Day } from '@/types';
 import { ACADEMIC_YEARS, CLASS_SECTIONS, DAYS, YEAR_LABELS } from '@/lib/constants';
 import { DayColumn } from './DayColumn';
+import { TimetableTable } from './TimetableTable';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -39,6 +40,7 @@ export function TimetableView({
     classSection: defaultClass,
     day: 'all',
   });
+  const [viewMode, setViewMode] = useState<'table' | 'card'>('table');
 
   const filteredSchedules = useMemo(() => {
     return schedules.filter((schedule) => {
@@ -57,7 +59,7 @@ export function TimetableView({
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-wrap items-center gap-4 p-4 bg-card rounded-lg border border-border/50"
+        className="flex flex-wrap items-center gap-4 p-4 bg-card rounded-xl border border-border/30 shadow-sm"
       >
         <div className="flex items-center gap-2 text-muted-foreground">
           <Filter className="h-4 w-4" />
@@ -121,27 +123,55 @@ export function TimetableView({
           </SelectContent>
         </Select>
 
-        <div className="ml-auto flex items-center gap-2 text-sm text-muted-foreground">
-          <Calendar className="h-4 w-4" />
-          <span>{filteredSchedules.length} schedule(s)</span>
+        <div className="ml-auto flex items-center gap-3">
+          <div className="flex items-center gap-1 bg-secondary/50 rounded-lg p-1">
+            <Button
+              variant={viewMode === 'table' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('table')}
+              className="h-8 w-8 p-0"
+            >
+              <Table2 className="h-4 w-4" />
+            </Button>
+            <Button
+              variant={viewMode === 'card' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('card')}
+              className="h-8 w-8 p-0"
+            >
+              <LayoutGrid className="h-4 w-4" />
+            </Button>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Calendar className="h-4 w-4" />
+            <span>{filteredSchedules.length} schedule(s)</span>
+          </div>
         </div>
       </motion.div>
 
-      {/* Timetable Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-        {displayDays.map((day) => (
-          <DayColumn
-            key={day}
-            day={day}
-            schedules={filteredSchedules}
-            onEdit={onEdit}
-            onApprove={onApprove}
-            onLock={onLock}
-            onDelete={onDelete}
-            isAdmin={isAdmin}
-          />
-        ))}
-      </div>
+      {/* View */}
+      {viewMode === 'table' ? (
+        <TimetableTable
+          schedules={filteredSchedules}
+          displayDays={displayDays}
+          isAdmin={isAdmin}
+        />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+          {displayDays.map((day) => (
+            <DayColumn
+              key={day}
+              day={day}
+              schedules={filteredSchedules}
+              onEdit={onEdit}
+              onApprove={onApprove}
+              onLock={onLock}
+              onDelete={onDelete}
+              isAdmin={isAdmin}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Empty State */}
       {filteredSchedules.length === 0 && (

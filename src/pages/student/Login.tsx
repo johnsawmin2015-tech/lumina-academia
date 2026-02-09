@@ -183,12 +183,20 @@ export default function StudentLogin() {
             </form>
           </Form>
 
-          <p className="mt-6 text-center text-sm text-muted-foreground">
-            Administrator?{' '}
-            <a href="/admin/login" className="text-primary hover:underline font-medium">
-              Admin Login
-            </a>
-          </p>
+          <div className="mt-6 text-center space-y-2">
+            <p className="text-sm text-muted-foreground">
+              Don't have an account?{' '}
+              <a href="/student/register" className="text-primary hover:underline font-medium">
+                Create Account
+              </a>
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Administrator?{' '}
+              <a href="/admin/login" className="text-primary hover:underline font-medium">
+                Admin Login
+              </a>
+            </p>
+          </div>
         </motion.div>
       </div>
 
