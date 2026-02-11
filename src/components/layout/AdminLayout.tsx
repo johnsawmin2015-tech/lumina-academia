@@ -5,7 +5,7 @@ import {
   LayoutDashboard, 
   Calendar, 
   CheckSquare, 
-  Settings,
+  BarChart3,
   ChevronRight
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -19,6 +19,7 @@ const sidebarItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/admin/dashboard' },
   { icon: Calendar, label: 'Schedules', path: '/admin/schedules' },
   { icon: CheckSquare, label: 'Approvals', path: '/admin/approvals' },
+  { icon: BarChart3, label: 'Analytics', path: '/admin/analytics' },
 ];
 
 export function AdminLayout({ children }: AdminLayoutProps) {
