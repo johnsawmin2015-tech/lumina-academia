@@ -14,6 +14,7 @@ import AdminLogin from "./pages/admin/Login";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminSchedules from "./pages/admin/Schedules";
 import AdminApprovals from "./pages/admin/Approvals";
+import AdminAnalytics from "./pages/admin/Analytics";
 import StudentLogin from "./pages/student/Login";
 import StudentRegister from "./pages/student/Register";
 import StudentTimetable from "./pages/student/Timetable";
@@ -59,6 +60,14 @@ const App = () => (
                 element={
                   <ProtectedRoute allowedRole="admin">
                     <AdminApprovals />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/analytics"
+                element={
+                  <ProtectedRoute allowedRole="admin">
+                    <AdminAnalytics />
                   </ProtectedRoute>
                 }
               />
