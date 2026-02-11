@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, Clock, CheckCircle, Lock, Plus, TrendingUp } from 'lucide-react';
+import { Calendar, Clock, CheckCircle, Lock, Plus, TrendingUp, BarChart3, ArrowRight } from 'lucide-react';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import { StatsCard } from '@/components/admin/StatsCard';
 import { ScheduleCard } from '@/components/timetable/ScheduleCard';
@@ -142,43 +142,61 @@ export default function AdminDashboard() {
             )}
           </div>
 
-          {/* Quick Stats */}
-          <div className="luxury-card p-8">
-            <h2 className="font-display text-xl font-semibold text-foreground mb-8">Quick Stats</h2>
-            
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/50">
-                <span className="text-sm text-muted-foreground">Draft Schedules</span>
-                <span className="font-semibold text-foreground">
-                  {schedules.filter((s) => s.status === 'draft').length}
-                </span>
+          {/* Quick Stats + Analytics Link */}
+          <div className="space-y-6">
+            <div className="luxury-card p-8">
+              <h2 className="font-display text-xl font-semibold text-foreground mb-8">Quick Stats</h2>
+              
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/50">
+                  <span className="text-sm text-muted-foreground">Draft Schedules</span>
+                  <span className="font-semibold text-foreground">
+                    {schedules.filter((s) => s.status === 'draft').length}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/50">
+                  <span className="text-sm text-muted-foreground">Active Years</span>
+                  <span className="font-semibold text-foreground">
+                    {new Set(schedules.map((s) => s.year)).size}/5
+                  </span>
+                </div>
+                <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/50">
+                  <span className="text-sm text-muted-foreground">Class Sections</span>
+                  <span className="font-semibold text-foreground">
+                    {new Set(schedules.map((s) => s.classSection)).size}/3
+                  </span>
+                </div>
+                <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/50">
+                  <span className="text-sm text-muted-foreground">Instructors</span>
+                  <span className="font-semibold text-foreground">
+                    {new Set(schedules.map((s) => s.instructor)).size}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/50">
-                <span className="text-sm text-muted-foreground">Active Years</span>
-                <span className="font-semibold text-foreground">
-                  {new Set(schedules.map((s) => s.year)).size}/5
-                </span>
-              </div>
-              <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/50">
-                <span className="text-sm text-muted-foreground">Class Sections</span>
-                <span className="font-semibold text-foreground">
-                  {new Set(schedules.map((s) => s.classSection)).size}/3
-                </span>
-              </div>
-              <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/50">
-                <span className="text-sm text-muted-foreground">Instructors</span>
-                <span className="font-semibold text-foreground">
-                  {new Set(schedules.map((s) => s.instructor)).size}
-                </span>
+
+              <div className="mt-6 pt-6 border-t border-border">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <TrendingUp className="h-4 w-4 text-status-approved" />
+                  <span>System running smoothly</span>
+                </div>
               </div>
             </div>
 
-            <div className="mt-6 pt-6 border-t border-border">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <TrendingUp className="h-4 w-4 text-status-approved" />
-                <span>System running smoothly</span>
+            {/* Analytics CTA */}
+            <a href="/admin/analytics" className="block group">
+              <div className="luxury-card p-6 bg-gradient-to-br from-primary/5 to-primary/10 hover:from-primary/10 hover:to-primary/15 transition-all duration-300">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center">
+                    <BarChart3 className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-display font-semibold text-foreground">Analytics Dashboard</h3>
+                    <p className="text-xs text-muted-foreground">Utilization & insights</p>
+                  </div>
+                  <ArrowRight className="h-4 w-4 text-primary group-hover:translate-x-1 transition-transform" />
+                </div>
               </div>
-            </div>
+            </a>
           </div>
         </div>
       </div>

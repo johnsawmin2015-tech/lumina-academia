@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { GraduationCap, Shield, Calendar, Clock, CheckCircle, ArrowRight, Sparkles, Users, Lock } from 'lucide-react';
+import { GraduationCap, Shield, Calendar, Clock, CheckCircle, ArrowRight, Sparkles, Users, Lock, BarChart3, Wand2, BookOpen } from 'lucide-react';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { Button } from '@/components/ui/button';
 
@@ -203,25 +203,43 @@ const Index = () => {
             <div className="separator-gold max-w-xs mx-auto" />
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8 lg:gap-10">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
             {[
               {
                 icon: Calendar,
                 title: 'Smart Scheduling',
-                description: 'Elegant card-based calendar with intelligent filtering by academic year, class section, and day.',
+                description: 'Premium table and card-based views with intelligent filtering by year, section, and day.',
                 gradient: 'from-year-1/20 to-year-2/10',
+              },
+              {
+                icon: Wand2,
+                title: 'Auto-Scheduler',
+                description: 'AI-powered timetable generation with conflict-free optimization and curriculum awareness.',
+                gradient: 'from-year-2/20 to-year-3/10',
               },
               {
                 icon: Shield,
                 title: 'Administrative Control',
-                description: 'Complete CRUD operations with sophisticated approval workflows and schedule locking capabilities.',
+                description: 'Full CRUD with approval workflows, schedule locking, and role-based permissions.',
                 gradient: 'from-year-3/20 to-year-4/10',
+              },
+              {
+                icon: BarChart3,
+                title: 'Analytics Dashboard',
+                description: 'Room utilization, lecturer workload, and schedule distribution insights at a glance.',
+                gradient: 'from-year-4/20 to-year-5/10',
+              },
+              {
+                icon: BookOpen,
+                title: 'Learning Resources',
+                description: 'Time-gated lecture materials with after-hours access control for students.',
+                gradient: 'from-year-5/20 to-year-1/10',
               },
               {
                 icon: Users,
                 title: 'Role-Based Access',
-                description: 'Dedicated portals for administrators and students with appropriate permissions and views.',
-                gradient: 'from-year-4/20 to-year-5/10',
+                description: 'Dedicated admin and student portals with appropriate permissions and views.',
+                gradient: 'from-year-1/20 to-year-5/10',
               },
             ].map((feature, index) => (
               <motion.div
