@@ -52,7 +52,7 @@ export default function StudentProfile() {
         {/* Profile Header */}
         <motion.div
           variants={staggerItemVariants}
-          className="bg-card rounded-xl border border-border overflow-hidden"
+          className="luxury-card overflow-hidden"
         >
           <div className="h-32 bg-gradient-to-r from-primary/20 via-primary/10 to-secondary/20" />
           
@@ -65,7 +65,7 @@ export default function StudentProfile() {
               
               {/* Name & Email */}
               <div className="text-center sm:text-left flex-1">
-                <h1 className="text-2xl font-bold text-foreground">{user?.name}</h1>
+                <h1 className="font-display text-2xl font-bold text-foreground">{user?.name}</h1>
                 <div className="flex items-center justify-center sm:justify-start gap-2 text-muted-foreground mt-1">
                   <Mail className="h-4 w-4" />
                   <span className="text-sm">{user?.email}</span>
@@ -83,15 +83,15 @@ export default function StudentProfile() {
         {/* Academic Information */}
         <motion.div
           variants={staggerItemVariants}
-          className="bg-card rounded-xl border border-border p-6"
+          className="luxury-card p-6"
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
               <GraduationCap className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-foreground">Academic Information</h2>
-              <p className="text-sm text-muted-foreground">Your enrollment details</p>
+              <h2 className="font-display text-lg font-semibold text-foreground">Academic Information</h2>
+              <p className="text-sm text-muted-foreground">UCS Mandalay · 2026</p>
             </div>
           </div>
 
@@ -131,7 +131,7 @@ export default function StudentProfile() {
         {/* Schedule Summary */}
         <motion.div
           variants={staggerItemVariants}
-          className="bg-card rounded-xl border border-border p-6"
+          className="luxury-card p-6"
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-lg bg-status-approved/10 flex items-center justify-center">
