@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  BarChart, Bar, PieChart, Pie, Cell, LineChart, Line,
+  BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts';
 import { 
   Activity, Users, DoorOpen, Clock, TrendingUp, 
-  BarChart3, PieChart as PieIcon, CalendarDays 
+  BarChart3, PieChart as PieIcon, CalendarDays, Grid3X3, Zap
 } from 'lucide-react';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import { StatsCard } from '@/components/admin/StatsCard';
@@ -16,12 +16,13 @@ import { staggerContainerVariants, staggerItemVariants } from '@/components/layo
 import { cn } from '@/lib/utils';
 
 const DAYS: Day[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+const TIME_LABELS = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00'];
 const CHART_COLORS = [
-  'hsl(36, 50%, 42%)',   // primary gold
-  'hsl(160, 55%, 40%)',  // emerald
-  'hsl(220, 55%, 50%)',  // royal blue
-  'hsl(280, 45%, 50%)',  // amethyst
-  'hsl(16, 60%, 50%)',   // copper
+  'hsl(36, 50%, 42%)',
+  'hsl(160, 55%, 40%)',
+  'hsl(220, 55%, 50%)',
+  'hsl(280, 45%, 50%)',
+  'hsl(16, 60%, 50%)',
 ];
 
 function timeToMinutes(t: string) {
@@ -39,7 +40,7 @@ export default function AdminAnalytics() {
   // ── KPIs ──
   const uniqueRooms = useMemo(() => new Set(schedules.map(s => s.room)), [schedules]);
   const uniqueInstructors = useMemo(() => new Set(schedules.map(s => s.instructor)), [schedules]);
-  const totalAvailableHours = uniqueRooms.size * 6 * 5; // 6h/day × 5 days per room
+  const totalAvailableHours = uniqueRooms.size * 6 * 5;
 
   const totalBookedHours = useMemo(() => {
     return schedules.reduce((sum, s) => {
@@ -51,6 +52,33 @@ export default function AdminAnalytics() {
   const roomUtilization = totalAvailableHours > 0
     ? Math.round((totalBookedHours / totalAvailableHours) * 100)
     : 0;
+
+  // ── Heatmap data: day × time slot → count ──
+  const heatmapData = useMemo(() => {
+    const grid: Record<string, Record<string, number>> = {};
+    DAYS.forEach(day => {
+      grid[day] = {};
+      TIME_LABELS.forEach(time => {
+        grid[day][time] = 0;
+      });
+    });
+    schedules.forEach(s => {
+      if (grid[s.day] && grid[s.day][s.timeSlot.start] !== undefined) {
+        grid[s.day][s.timeSlot.start]++;
+      }
+    });
+    return grid;
+  }, [schedules]);
+
+  const maxHeatValue = useMemo(() => {
+    let max = 1;
+    DAYS.forEach(day => {
+      TIME_LABELS.forEach(time => {
+        if (heatmapData[day]?.[time] > max) max = heatmapData[day][time];
+      });
+    });
+    return max;
+  }, [heatmapData]);
 
   // ── Room utilization per room ──
   const roomData = useMemo(() => {
@@ -78,10 +106,10 @@ export default function AdminAnalytics() {
     });
     return Array.from(map.entries())
       .map(([name, hours]) => ({
-        name: name.split(' ').slice(-1)[0], // last name only for chart
+        name: name.split(' ').slice(-1)[0],
         fullName: name,
         hours: Math.round(hours * 10) / 10,
-        load: Math.round((hours / 20) * 100), // 20h max
+        load: Math.round((hours / 20) * 100),
       }))
       .sort((a, b) => b.hours - a.hours)
       .slice(0, 10);
@@ -115,6 +143,16 @@ export default function AdminAnalytics() {
     }));
   }, [schedules]);
 
+  // ── Peak hours ──
+  const peakHour = useMemo(() => {
+    const hourCounts: Record<string, number> = {};
+    schedules.forEach(s => {
+      hourCounts[s.timeSlot.start] = (hourCounts[s.timeSlot.start] || 0) + 1;
+    });
+    const peak = Object.entries(hourCounts).sort((a, b) => b[1] - a[1])[0];
+    return peak ? `${peak[0]} (${peak[1]} classes)` : 'N/A';
+  }, [schedules]);
+
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (!active || !payload?.length) return null;
     return (
@@ -130,15 +168,32 @@ export default function AdminAnalytics() {
     );
   };
 
+  const getHeatColor = (value: number) => {
+    if (value === 0) return 'bg-muted/30';
+    const intensity = value / maxHeatValue;
+    if (intensity <= 0.25) return 'bg-primary/15 text-primary';
+    if (intensity <= 0.5) return 'bg-primary/30 text-primary';
+    if (intensity <= 0.75) return 'bg-primary/50 text-primary-foreground';
+    return 'bg-primary/80 text-primary-foreground';
+  };
+
   return (
     <AdminLayout>
       <div className="space-y-8">
         {/* Header */}
-        <div>
-          <h1 className="font-display text-4xl font-bold text-foreground tracking-tight">Analytics</h1>
-          <p className="text-muted-foreground mt-2">
-            Resource utilization, workload distribution, and scheduling insights
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <h1 className="font-display text-4xl font-bold text-foreground tracking-tight">Analytics</h1>
+            <p className="text-muted-foreground mt-2">
+              Resource utilization, workload distribution, and scheduling insights
+            </p>
+          </div>
+          <div className="flex items-center gap-3 text-sm text-muted-foreground">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary/50">
+              <Zap className="h-3.5 w-3.5 text-primary" />
+              <span>Peak: {peakHour}</span>
+            </div>
+          </div>
         </div>
 
         {/* KPI Cards */}
@@ -160,6 +215,74 @@ export default function AdminAnalytics() {
           <motion.div variants={staggerItemVariants}>
             <StatsCard title="Booked Hours" value={Math.round(totalBookedHours)} icon={Clock} description="Weekly total" variant="warning" />
           </motion.div>
+        </motion.div>
+
+        {/* Heatmap */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="luxury-card p-6"
+        >
+          <div className="flex items-center gap-2 mb-6">
+            <Grid3X3 className="h-5 w-5 text-primary" />
+            <h2 className="font-display text-lg font-semibold text-foreground">Room Density Heatmap</h2>
+            <span className="text-xs text-muted-foreground ml-auto">Classes per time slot across all rooms</span>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full border-separate border-spacing-1">
+              <thead>
+                <tr>
+                  <th className="text-xs font-medium text-muted-foreground text-left p-2 w-20" />
+                  {DAYS.map(day => (
+                    <th key={day} className="text-xs font-medium text-muted-foreground text-center p-2">
+                      {day.slice(0, 3)}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {TIME_LABELS.map(time => (
+                  <tr key={time}>
+                    <td className="text-xs font-mono text-muted-foreground p-2">{time}</td>
+                    {DAYS.map(day => {
+                      const val = heatmapData[day]?.[time] || 0;
+                      return (
+                        <td key={`${day}-${time}`} className="p-1">
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: 0.02 * (DAYS.indexOf(day) + TIME_LABELS.indexOf(time)) }}
+                            className={cn(
+                              'w-full aspect-square rounded-lg flex items-center justify-center text-xs font-semibold transition-all min-w-[48px]',
+                              getHeatColor(val)
+                            )}
+                          >
+                            {val > 0 ? val : ''}
+                          </motion.div>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Legend */}
+          <div className="flex items-center gap-4 mt-4 pt-4 border-t border-border/30">
+            <span className="text-xs text-muted-foreground">Density:</span>
+            <div className="flex items-center gap-1.5">
+              {[0, 1, 2, 3].map(i => (
+                <div key={i} className={cn(
+                  'w-5 h-5 rounded',
+                  i === 0 ? 'bg-muted/30' : i === 1 ? 'bg-primary/20' : i === 2 ? 'bg-primary/45' : 'bg-primary/80'
+                )} />
+              ))}
+            </div>
+            <span className="text-xs text-muted-foreground">Low → High</span>
+          </div>
         </motion.div>
 
         {/* Charts Row 1 */}
