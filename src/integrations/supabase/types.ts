@@ -14,16 +14,167 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          class_section: string | null
+          created_at: string
+          id: string
+          name: string
+          student_id: string | null
+          updated_at: string
+          user_id: string
+          year: number | null
+        }
+        Insert: {
+          class_section?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          student_id?: string | null
+          updated_at?: string
+          user_id: string
+          year?: number | null
+        }
+        Update: {
+          class_section?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          student_id?: string | null
+          updated_at?: string
+          user_id?: string
+          year?: number | null
+        }
+        Relationships: []
+      }
+      resources: {
+        Row: {
+          class_section: string
+          created_at: string
+          file_size: string | null
+          file_url: string | null
+          id: string
+          subject: string
+          title: string
+          updated_at: string
+          year: number
+        }
+        Insert: {
+          class_section: string
+          created_at?: string
+          file_size?: string | null
+          file_url?: string | null
+          id?: string
+          subject: string
+          title: string
+          updated_at?: string
+          year: number
+        }
+        Update: {
+          class_section?: string
+          created_at?: string
+          file_size?: string | null
+          file_url?: string | null
+          id?: string
+          subject?: string
+          title?: string
+          updated_at?: string
+          year?: number
+        }
+        Relationships: []
+      }
+      schedules: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          class_section: string
+          created_at: string
+          day: string
+          id: string
+          instructor: string
+          notes: string | null
+          room: string
+          status: string
+          subject: string
+          time_slot_end: string
+          time_slot_start: string
+          updated_at: string
+          year: number
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          class_section: string
+          created_at?: string
+          day: string
+          id?: string
+          instructor: string
+          notes?: string | null
+          room: string
+          status?: string
+          subject: string
+          time_slot_end: string
+          time_slot_start: string
+          updated_at?: string
+          year: number
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          class_section?: string
+          created_at?: string
+          day?: string
+          id?: string
+          instructor?: string
+          notes?: string | null
+          room?: string
+          status?: string
+          subject?: string
+          time_slot_end?: string
+          time_slot_start?: string
+          updated_at?: string
+          year?: number
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_student_section: { Args: { _user_id: string }; Returns: string }
+      get_student_year: { Args: { _user_id: string }; Returns: number }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "student"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +301,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "student"],
+    },
   },
 } as const
